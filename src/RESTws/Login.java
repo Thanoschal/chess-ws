@@ -19,7 +19,7 @@ import com.google.gson.Gson;
 
 import obj_classes.User;
 
-@Path("/login")
+@Path("login")
 public class Login {
 	
 	private String query = "select * from users where username=? and password=?";
@@ -27,7 +27,7 @@ public class Login {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response register(String input) throws SQLException, ClassNotFoundException {
+	public Response handle(String input) throws SQLException, ClassNotFoundException {
 		int status;
 		ObjectNode objectNode = new ObjectMapper().createObjectNode();
 		Class.forName("com.mysql.jdbc.Driver");
@@ -39,16 +39,15 @@ public class Login {
 		ResultSet rs = stmt.executeQuery();
 		if (rs.next()) {
 			status = 200;
-			objectNode.put("status", "Ok");
+			objectNode.put("message", "Ok");
 		}
 		else {
 			status = 400;
-			objectNode.put("status", "Failed");
+			objectNode.put("message", "Failed");
 		}
 		rs.close();
 		stmt.close();
 		con.close();  
 		return Response.status(status).entity(objectNode.toString()).build();
 	}
-
 }

@@ -22,17 +22,17 @@ import com.google.gson.Gson;
 import obj_classes.User;
 
 
-@Path("/register")
+@Path("register")
 public class Register {	
 	
-	private String query = "select * from users where username=?";
+	private String query = "select count(*) as count from users where username=?";
 	private String updateStatement = "insert into users (username, password) values (?,?)";
 
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response register(String input) throws SQLException, ClassNotFoundException {
+	public Response handle(String input) throws SQLException, ClassNotFoundException {
 		int status;
 		ObjectNode objectNode = new ObjectMapper().createObjectNode();
 		Class.forName("com.mysql.jdbc.Driver");
@@ -42,29 +42,28 @@ public class Register {
 		stmt.setString(1, user.getName());
 		ResultSet rs = stmt.executeQuery();
 		int count = 0;
-		while (rs.next()) count++;
+		if (rs.next()) count = rs.getInt("count");
 		rs.close();
 		stmt.close();
 		if (count == 0) {
 			stmt = con.prepareStatement(this.updateStatement);
 			stmt.setString(1, user.getName());
-			stmt.setString(2, user.getPassword());
-			int rowsAffected = stmt.executeUpdate();
-			stmt.close();
-			con.close();
-			if (rowsAffected > 0) {
+			stmt.setString(2, user.getPassword());			
+			if (stmt.executeUpdate() > 0) {
 				status = 200;
-				objectNode.put("status", "Ok");
+				objectNode.put("message", "Ok");
 			}
 			else {
 				status = 500;
-				objectNode.put("status", "Failed");
+				objectNode.put("message", "Failed");
 			}
+			stmt.close();
 		}
 		else {
 			status = 400;
-			objectNode.put("status", "Already exists");
+			objectNode.put("message", "Already exists");
 		}
+		con.close();
 		return Response.status(status).entity(objectNode.toString()).build();
 	}
 }
