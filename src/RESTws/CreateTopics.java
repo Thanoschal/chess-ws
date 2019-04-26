@@ -18,21 +18,18 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @Path("createtopics")
 public class CreateTopics {
+	
+	private String command = "kafka-topics --create --zookeeper 195.134.71.250:2181 --replication-factor 1 --partitions 1 --topic ";
+	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{username}")
 	public Response handle(@PathParam("username") String username) throws IOException, InterruptedException {
-
-		String topic = "kafka-topics --create --zookeeper 195.134.71.250:2181 --replication-factor 1 --partitions 1 --topic " + username + "; ";
-		topic += "kafka-topics --create --zookeeper 195.134.71.250:2181 --replication-factor 1 --partitions 1 --topic " + username + "Chat;";
-
-		String output = createKafkaTopic(topic);// + createKafkaTopic(chat_topic);
-
+		String topic = command + username + "; " + command + username + "Chat;";
+		String output = createKafkaTopic(topic);
 		ObjectNode objectNode = new ObjectMapper().createObjectNode();
 		objectNode.put("message", output.toString());
-		objectNode.put("topic", topic);
 		return Response.status(200).entity(objectNode.toString()).build();
-
 	}
 	
 	private String createKafkaTopic(String topic) throws IOException, InterruptedException {
@@ -42,16 +39,12 @@ public class CreateTopics {
 		processBuilder.command("bash", "-c", topic);
 		StringBuilder output = new StringBuilder();
 		Process process = processBuilder.start();
-
-		BufferedReader reader = new BufferedReader(
-				new InputStreamReader(process.getInputStream()));
-
+		BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 		String line;
 		while ((line = reader.readLine()) != null) {
 			output.append(line + "\n");
 		}
 		process.waitFor();
 		return output.toString();
-	} 
-	
+	} 	
 }
