@@ -23,6 +23,12 @@ public class TableHolder {
 		}
 	}
 	
+	public void remove(Table t) {
+		synchronized (tableList) {
+			tableList.removeIf(table -> table.equals(t));
+		}
+	}
+	
 	public void print() {
 		synchronized (tableList) {
 			for (Table table : tableList) {

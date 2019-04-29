@@ -21,5 +21,16 @@ public class Table {
 	public String toString() {
 		return "Table: [white=" + white + ", black=" + black + "]";
 	}
-	
+
+	@Override
+	public boolean equals(Object obj) {		
+		if (obj == null || getClass() != obj.getClass()) return false;
+		Table other = (Table) obj;
+		if (this.black.contentEquals(other.getBlack()) && this.white.equals(other.getWhite())) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 }

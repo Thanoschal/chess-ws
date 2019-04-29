@@ -14,14 +14,14 @@ import com.google.gson.Gson;
 import obj_classes.Table;
 import structures.TableHolder;
 
-@Path("newgametable")
-public class NewGameTable {
+@Path("removegametable")
+public class RemoveGameTable {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response handle(String input)  {
 		Table table = new Gson().fromJson(input, Table.class);
-		TableHolder.getInstance().add(table);
+		TableHolder.getInstance().remove(table);
 		ObjectNode objectNode = new ObjectMapper().createObjectNode();
 		objectNode.put("message", "Ok");
 		objectNode.put("Content", table.toString());
