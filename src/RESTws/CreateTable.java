@@ -12,8 +12,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import structures.HashMapPlayers;
 
-@Path("newtable")
-public class NewTable {
+@Path("createtable")
+public class CreateTable {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)

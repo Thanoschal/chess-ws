@@ -12,8 +12,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import structures.HashMapPlayers;
 
-@Path("removetable")
-public class RemoveTable {
+@Path("undocreatetable")
+public class UndoCreateTable {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)

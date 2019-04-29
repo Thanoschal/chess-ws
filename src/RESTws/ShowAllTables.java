@@ -10,8 +10,8 @@ import com.google.gson.JsonArray;
 
 import structures.TableHolder;
 
-@Path("returntables")
-public class ReturnTables {
+@Path("showalltables")
+public class ShowAllTables {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response handle() {

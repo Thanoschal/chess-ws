@@ -14,8 +14,8 @@ import com.google.gson.Gson;
 import obj_classes.Table;
 import structures.TableHolder;
 
-@Path("addtable")
-public class AddTable {
+@Path("newfulltable")
+public class NewFullTable {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
