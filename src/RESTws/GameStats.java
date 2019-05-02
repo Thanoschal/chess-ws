@@ -24,9 +24,7 @@ public class GameStats {
         PreparedStatement stmt = con.prepareStatement(this.query);
         ResultSet rs = stmt.executeQuery();
         while (rs.next()) {
-            float number = rs.getFloat("number");
-            String description = rs.getString("description");
-            objectNode.put(description, number);
+            objectNode.put(rs.getString("description"), rs.getFloat("number"));
         }
         stmt.close();
         con.close();
