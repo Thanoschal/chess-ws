@@ -23,6 +23,7 @@ import obj_classes.User;
 public class Login {
 	
 	private String query = "select * from users where username=? and password=?";
+	private String loggedIn = "update users set connected=true where username=? and connected=false";
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -38,12 +39,22 @@ public class Login {
 		stmt.setString(2, user.getPassword());
 		ResultSet rs = stmt.executeQuery();
 		if (rs.next()) {
-			status = 200;
-			objectNode.put("message", "Ok");
+			PreparedStatement updstmt = con.prepareStatement(this.loggedIn);
+			updstmt.setString(1, user.getName());
+			int rows = updstmt.executeUpdate();
+			if (rows > 0) {
+				status = 200;
+				objectNode.put("message", "Ok");
+			}
+			else {
+				status = 401;
+				objectNode.put("message", "Already logged in");
+			}
+			updstmt.close();
 		}
 		else {
 			status = 400;
-			objectNode.put("message", "Failed");
+			objectNode.put("message", "Not authorized");
 		}
 		rs.close();
 		stmt.close();
