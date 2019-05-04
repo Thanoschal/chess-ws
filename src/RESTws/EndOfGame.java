@@ -21,7 +21,7 @@ import obj_classes.FinishedGame;
 @Path("endofgame")
 public class EndOfGame {
 	
-	private String updateStatement = "insert into tables (white, black, movesWhite, movesBlack, winner, winnerColor) values (?,?,?,?,?,?)";
+	private String updateStatement = "insert into tables (white, black, moves, winner, winnerColor) values (?,?,?,?,?)";
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -35,10 +35,9 @@ public class EndOfGame {
 		PreparedStatement stmt = con.prepareStatement(this.updateStatement);
 		stmt.setString(1, finishedGame.getWhite());
 		stmt.setString(2, finishedGame.getBlack());
-		stmt.setInt(3, finishedGame.getMovesWhite());
-		stmt.setInt(4, finishedGame.getMovesBlack());
-		stmt.setString(5, finishedGame.getWinner());
-		stmt.setString(6, finishedGame.getWinnerColor());
+		stmt.setInt(3, finishedGame.getMoves());
+		stmt.setString(4, finishedGame.getWinner());
+		stmt.setString(5, finishedGame.getWinnerColor());
 		if (stmt.executeUpdate() > 0) {
 			status = 200;
 			objectNode.put("message", "Ok");

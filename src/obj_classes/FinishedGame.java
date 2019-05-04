@@ -4,16 +4,14 @@ public class FinishedGame {
 	
 	private String white;
 	private String black;
-	private int movesBlack;
-	private int movesWhite;
+	private int moves;
 	private String winner;
 	private String winnerColor;
 
-	public FinishedGame(String white, String black, int movesBlack, int movesWhite, String winner, String winnerColor) {
+	public FinishedGame(String white, String black, int moves, String winner, String winnerColor) {
 		this.white = white;
 		this.black = black;
-		this.movesBlack = movesBlack;
-		this.movesWhite = movesWhite;
+		this.moves = moves;
 		this.winner = winner;
 		this.winnerColor = winnerColor;
 	}
@@ -26,12 +24,8 @@ public class FinishedGame {
 		return black;
 	}
 
-	public int getMovesBlack() {
-		return movesBlack;
-	}
-
-	public int getMovesWhite() {
-		return movesWhite;
+	public int getMoves() {
+		return moves;
 	}
 
 	public String getWinner() {
