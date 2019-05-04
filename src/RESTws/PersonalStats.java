@@ -17,7 +17,7 @@ public class PersonalStats {
     private String query = "SELECT COUNT(*) AS number, 'gamesPlayed' AS description FROM tables WHERE white=? or black=? UNION ALL " +
             "SELECT COUNT(*) AS number, 'gamesWon' AS description FROM tables WHERE winner=? UNION ALL " +
             "SELECT COUNT(*) AS number, 'gamesLost' AS description FROM tables WHERE (white=? or black=?) and winner <> ? and winner is not null UNION ALL " +
-            "SELECT COUNT(*) AS number, 'draws' AS description FROM tables WHERE  (white=? or black=?) and winner is null UNION ALL" +
+            "SELECT COUNT(*) AS number, 'draws' AS description FROM tables WHERE  (white=? or black=?) and winner is null UNION ALL " +
             "SELECT COUNT(*) AS number, 'white' AS description FROM tables WHERE white=? UNION ALL " +
             "SELECT COUNT(*) AS number, 'black' AS description FROM tables WHERE black=? UNION ALL " +
             "SELECT AVG(mv) as number, 'avgMoves' as description FROM (SELECT (moves-1) AS mv FROM tables WHERE (white=? or black=?) and winner<>? and winner is not null UNION ALL SELECT moves AS mv FROM tables WHERE (white=? or black=?) and (winner=? or winner is null)) AS a";
