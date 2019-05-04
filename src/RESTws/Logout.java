@@ -1,7 +1,6 @@
 package RESTws;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -28,8 +27,7 @@ public class Logout {
         PreparedStatement stmt = con.prepareStatement(this.query);
         stmt.setString(1, username);
         stmt.executeUpdate();
-        ObjectNode objectNode = new ObjectMapper().createObjectNode();
-        objectNode.put("message", "Ok");
-        return Response.status(200).entity(objectNode.toString()).build();
+        stmt.close();
+        return Response.status(200).entity(new ObjectMapper().createObjectNode().put("message", "Ok").toString()).build();
     }
 }

@@ -22,9 +22,6 @@ public class NewGameTable {
 	public Response handle(String input)  {
 		Table table = new Gson().fromJson(input, Table.class);
 		TableHolder.getInstance().add(table);
-		ObjectNode objectNode = new ObjectMapper().createObjectNode();
-		objectNode.put("message", "Ok");
-		objectNode.put("Content", table.toString());
-		return Response.status(200).entity(objectNode.toString()).build();
+		return Response.status(200).entity(new ObjectMapper().createObjectNode().put("message", "Ok").put("Content", table.toString()).toString()).build();
 	}
 }

@@ -8,7 +8,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.gson.Gson;
 
 import obj_classes.Table;
@@ -22,9 +21,6 @@ public class RemoveGameTable {
 	public Response handle(String input)  {
 		Table table = new Gson().fromJson(input, Table.class);
 		TableHolder.getInstance().remove(table);
-		ObjectNode objectNode = new ObjectMapper().createObjectNode();
-		objectNode.put("message", "Ok");
-		objectNode.put("Content", table.toString());
-		return Response.status(200).entity(objectNode.toString()).build();
+		return Response.status(200).entity(new ObjectMapper().createObjectNode().put("message", "Ok").put("Content", table.toString()).toString()).build();
 	}
 }

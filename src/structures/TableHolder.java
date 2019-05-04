@@ -9,7 +9,7 @@ import com.google.gson.JsonObject;
 import obj_classes.Table;
 
 public class TableHolder {
-	private static List<Table> tableList = new LinkedList<Table>();
+	private static List<Table> tableList = new LinkedList<>();
 	private static TableHolder instance = null;
 	
 	public static synchronized TableHolder getInstance () {
@@ -17,40 +17,25 @@ public class TableHolder {
 		return instance;
 	}
 	
-	public void add(Table t) {
-		synchronized (tableList) {
-			tableList.add(t);
-		}
+	public synchronized void add(Table t) {
+		tableList.add(t);
 	}
 	
-	public void remove(Table t) {
-		synchronized (tableList) {
-			tableList.removeIf(table -> table.equals(t));
-		}
-	}
-	
-	public void print() {
-		synchronized (tableList) {
-			for (Table table : tableList) {
-				System.out.println(table.toString());
-			}
-		}
+	public synchronized void remove(Table t) {
+		tableList.removeIf(table -> table.equals(t));
 	}
 	
 	/* 
 	 * https://codingwithcake.com/java/java-8-convert-map-json-array/ 
 	 */
-	public JsonArray retrieveAllTables() {
-		synchronized (tableList) {
-			JsonArray array = new JsonArray();
-			for (Table table : tableList) {
-				JsonObject jsonObject = new JsonObject();
-		        jsonObject.addProperty("white", table.getWhite());
-		        jsonObject.addProperty("black", table.getBlack());
-		        array.add(jsonObject);
-			}
-			return array;
+	public synchronized JsonArray retrieveAllTables() {
+		JsonArray array = new JsonArray();
+		for (Table table : tableList) {
+			JsonObject jsonObject = new JsonObject();
+			jsonObject.addProperty("white", table.getWhite());
+			jsonObject.addProperty("black", table.getBlack());
+			array.add(jsonObject);
 		}
+		return array;
 	}
-	
 }

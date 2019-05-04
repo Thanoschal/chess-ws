@@ -20,9 +20,9 @@ public class GetOpponents {
 	@Path("{username}")
 	public Response handle(@PathParam("username") String username) {
 		JsonArray arr = HashMapPlayers.getInstance().retrieveAllKeys();
-		JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("name", username);
-		arr.remove(jsonObject);
+		JsonObject obj = new JsonObject();
+        obj.addProperty("name", username);
+		arr.remove(obj);
 		return Response.status(200).entity(arr.toString()).build();
 	}
 }

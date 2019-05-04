@@ -27,6 +27,7 @@ public class Top5 {
             jsonObject.addProperty("wins", rs.getInt("wins"));
             jsonArray.add(jsonObject);
         }
+        rs.close();
         stmt.close();
         con.close();
         return Response.status(200).entity(jsonArray.toString()).build();

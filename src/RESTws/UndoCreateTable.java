@@ -8,7 +8,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import structures.HashMapPlayers;
 
@@ -20,8 +19,6 @@ public class UndoCreateTable {
 	@Path("{username}")
 	public Response handle(@PathParam("username") String username) {
 		HashMapPlayers.getInstance().pop(username);
-		ObjectNode objectNode = new ObjectMapper().createObjectNode();
-		objectNode.put("message", "Ok");
-		return Response.status(200).entity(objectNode.toString()).build();
+		return Response.status(200).entity(new ObjectMapper().createObjectNode().put("message", "Ok").toString()).build();
 	}
 }

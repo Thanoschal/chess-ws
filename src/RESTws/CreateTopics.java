@@ -14,7 +14,9 @@ import javax.ws.rs.core.Response;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-/* https://www.mkyong.com/java/how-to-execute-shell-command-from-java/ */
+/*
+ * https://www.mkyong.com/java/how-to-execute-shell-command-from-java/
+ */
 
 @Path("createtopics")
 public class CreateTopics {
@@ -26,9 +28,8 @@ public class CreateTopics {
 	@Path("{username}")
 	public Response handle(@PathParam("username") String username) throws IOException, InterruptedException {
 		String topic = command + username + "; " + command + username + "Chat;";
-		String output = createKafkaTopic(topic);
 		ObjectNode objectNode = new ObjectMapper().createObjectNode();
-		objectNode.put("message", output.toString());
+		objectNode.put("message", createKafkaTopic(topic));
 		return Response.status(200).entity(objectNode.toString()).build();
 	}
 	

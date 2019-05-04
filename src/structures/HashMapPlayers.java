@@ -7,7 +7,7 @@ import com.google.gson.JsonObject;
 
 public class HashMapPlayers {
 
-	private static HashMap<String, String> players = new HashMap<String, String>();
+	private static HashMap<String, String> players = new HashMap<>();
 	private static HashMapPlayers instance = null;
 	
 	public static synchronized HashMapPlayers getInstance () {
@@ -15,40 +15,28 @@ public class HashMapPlayers {
 		return instance;
 	}
 	
-	public void push (String key) {
-		synchronized (players) {
-			players.put(key, key);
-		}
+	public synchronized void push (String key) {
+		players.put(key, key);
 	}
 	
-	public void pop (String key) {
-		synchronized (players) {
-			players.remove(key);
-		}
-	}
-	
-	public void print () {
-		synchronized (players) {
-			players.keySet().forEach(key->System.out.println(key));
-		}
+	public synchronized void pop (String key) {
+		players.remove(key);
 	}
 	
 	/* 
 	 * https://codingwithcake.com/java/java-8-convert-map-json-array/ 
 	 */
-	public JsonArray retrieveAllKeys() {
-		synchronized (players) {
-			return players.entrySet().stream().map(r -> {
-		        JsonObject jsonObject = new JsonObject();
-		        jsonObject.addProperty("name", r.getKey());
-		        return jsonObject;
-		    }).reduce(new JsonArray(), (jsonArray, jsonObject) -> {
-		        jsonArray.add(jsonObject);
-		        return jsonArray;
-		    }, (jsonArray, otherJsonArray) -> {
-		        jsonArray.addAll(otherJsonArray);
-		        return jsonArray;
-		    });
-		}
+	public synchronized JsonArray retrieveAllKeys() {
+		return players.entrySet().stream().map(r -> {
+			JsonObject jsonObject = new JsonObject();
+			jsonObject.addProperty("name", r.getKey());
+			return jsonObject;
+		}).reduce(new JsonArray(), (jsonArray, jsonObject) -> {
+			jsonArray.add(jsonObject);
+			return jsonArray;
+		}, (jsonArray, otherJsonArray) -> {
+			jsonArray.addAll(otherJsonArray);
+			return jsonArray;
+		});
 	}
 }

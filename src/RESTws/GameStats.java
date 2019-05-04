@@ -18,16 +18,17 @@ public class GameStats {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response handle() throws ClassNotFoundException, SQLException {
-        ObjectNode objectNode = new ObjectMapper().createObjectNode();
+        ObjectNode node = new ObjectMapper().createObjectNode();
         Class.forName("com.mysql.jdbc.Driver");
         Connection con = DriverManager.getConnection( "jdbc:mysql://localhost:3306/m111","root","root");
         PreparedStatement stmt = con.prepareStatement(this.query);
         ResultSet rs = stmt.executeQuery();
         while (rs.next()) {
-            objectNode.put(rs.getString("description"), rs.getFloat("number"));
+            node.put(rs.getString("description"), rs.getFloat("number"));
         }
+        rs.close();
         stmt.close();
         con.close();
-        return Response.status(200).entity(objectNode.toString()).build();
+        return Response.status(200).entity(node.toString()).build();
     }
 }
