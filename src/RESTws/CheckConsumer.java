@@ -1,6 +1,7 @@
 package RESTws;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -8,15 +9,12 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
-@Path("logout")
-public class Logout {
+@Path("checkconsumer")
+public class CheckConsumer {
 
-    private String query = "update users set connected=false where username=?";
+    private String query = "select kafka from users where username=?";
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -26,9 +24,22 @@ public class Logout {
         Connection con = DriverManager.getConnection( "jdbc:mysql://localhost:3306/m111","root","root");
         PreparedStatement stmt = con.prepareStatement(this.query);
         stmt.setString(1, username);
-        stmt.executeUpdate();
+        ResultSet rs = stmt.executeQuery();
+        ObjectNode node = new ObjectMapper().createObjectNode();
+        int status;
+        if (rs.next()) {
+            status = 200;
+            boolean flag = rs.getBoolean("kafka");
+            node.put("message", "Ok");
+            node.put("flag", flag);
+        }
+        else {
+            status = 400;
+            node.put("message", "Failed");
+            node.put("flag", false);
+        }
         stmt.close();
         con.close();
-        return Response.status(200).entity(new ObjectMapper().createObjectNode().put("message", "Ok").toString()).build();
+        return Response.status(status).entity(node.toString()).build();
     }
 }

@@ -13,11 +13,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-@Path("logout")
-public class Logout {
-
-    private String query = "update users set connected=false where username=?";
-
+@Path("unregisterconsumer")
+public class UnregisterConsumer {
+    private String query = "update users set kafka=false where username=?";
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{username}")
