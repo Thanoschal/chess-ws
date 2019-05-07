@@ -25,6 +25,6 @@ public class GameStats {
             while (rs.next())
                 node.put(rs.getString("description"), rs.getFloat("number"));
         }
-        return Response.status(200).entity(node).build();
+        return Response.status(200).entity(node.toString()).build();
     }
 }

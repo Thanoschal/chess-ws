@@ -27,6 +27,6 @@ public class Top5 {
                jsonArray.add(jsonObject);
            }
        }
-        return Response.status(200).entity(jsonArray).build();
+        return Response.status(200).entity(jsonArray.toString()).build();
     }
 }

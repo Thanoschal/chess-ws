@@ -20,6 +20,6 @@ public class RemoveGameTable {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response handle(String input)  {
 		TableHolder.getInstance().remove(new Gson().fromJson(input, Table.class));
-		return Response.status(200).entity(new ObjectMapper().createObjectNode().put("message", "Ok")).build();
+		return Response.status(200).entity(new ObjectMapper().createObjectNode().put("message", "Ok").toString()).build();
 	}
 }

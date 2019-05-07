@@ -61,6 +61,6 @@ public class Register {
 				node.put("message", "Already exists");
 			}
 		}
-		return Response.status(status).entity(node).build();
+		return Response.status(status).entity(node.toString()).build();
 	}
 }

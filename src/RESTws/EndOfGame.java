@@ -46,6 +46,6 @@ public class EndOfGame {
 				node.put("message", "Failed");
 			}
 		}
-		return Response.status(status).entity(node).build();
+		return Response.status(status).entity(node.toString()).build();
 	}
 }

@@ -27,6 +27,6 @@ public class Logout {
             stmt.setString(1, username);
             stmt.executeUpdate();
         }
-        return Response.status(200).entity(new ObjectMapper().createObjectNode().put("message", "Ok")).build();
+        return Response.status(200).entity(new ObjectMapper().createObjectNode().put("message", "Ok").toString()).build();
     }
 }

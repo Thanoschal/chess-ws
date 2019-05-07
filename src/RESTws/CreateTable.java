@@ -19,6 +19,6 @@ public class CreateTable {
 	@Path("{username}")
 	public Response handle(@PathParam("username") String username) {
 		HashMapPlayers.getInstance().push(username);
-		return Response.status(200).entity(new ObjectMapper().createObjectNode().put("message", "Ok")).build();
+		return Response.status(200).entity(new ObjectMapper().createObjectNode().put("message", "Ok").toString()).build();
 	}
 }

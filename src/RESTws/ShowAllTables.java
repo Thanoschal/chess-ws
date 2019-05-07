@@ -13,6 +13,6 @@ public class ShowAllTables {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response handle() {
-		return Response.status(200).entity(TableHolder.getInstance().retrieveAllTables()).build();
+		return Response.status(200).entity(TableHolder.getInstance().retrieveAllTables().toString()).build();
 	}
 }

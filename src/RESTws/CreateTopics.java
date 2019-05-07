@@ -28,7 +28,7 @@ public class CreateTopics {
 	@Path("{username}")
 	public Response handle(@PathParam("username") String username) throws IOException, InterruptedException {
 		StringBuilder topic = new StringBuilder(command).append(username).append( "; ").append(command).append(username).append("Chat;");
-		return Response.status(200).entity(new ObjectMapper().createObjectNode().put("message", createKafkaTopic(topic.toString()))).build();
+		return Response.status(200).entity(new ObjectMapper().createObjectNode().put("message", createKafkaTopic(topic.toString())).toString()).build();
 	}
 	
 	private String createKafkaTopic(String topic) throws IOException, InterruptedException {
