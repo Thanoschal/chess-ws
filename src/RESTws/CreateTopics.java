@@ -27,10 +27,8 @@ public class CreateTopics {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{username}")
 	public Response handle(@PathParam("username") String username) throws IOException, InterruptedException {
-		String topic = command + username + "; " + command + username + "Chat;";
-		ObjectNode objectNode = new ObjectMapper().createObjectNode();
-		objectNode.put("message", createKafkaTopic(topic));
-		return Response.status(200).entity(objectNode.toString()).build();
+		StringBuilder topic = new StringBuilder(command).append(username).append( "; ").append(command).append(username).append("Chat;");
+		return Response.status(200).entity(new ObjectMapper().createObjectNode().put("message", createKafkaTopic(topic.toString()))).build();
 	}
 	
 	private String createKafkaTopic(String topic) throws IOException, InterruptedException {

@@ -23,6 +23,6 @@ public class GetOpponents {
 		JsonObject obj = new JsonObject();
         obj.addProperty("name", username);
 		arr.remove(obj);
-		return Response.status(200).entity(arr.toString()).build();
+		return Response.status(200).entity(arr).build();
 	}
 }

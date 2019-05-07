@@ -20,8 +20,7 @@ public class NewGameTable {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response handle(String input)  {
-		Table table = new Gson().fromJson(input, Table.class);
-		TableHolder.getInstance().add(table);
-		return Response.status(200).entity(new ObjectMapper().createObjectNode().put("message", "Ok").put("Content", table.toString()).toString()).build();
+		TableHolder.getInstance().add(new Gson().fromJson(input, Table.class));
+		return Response.status(200).entity(new ObjectMapper().createObjectNode().put("message", "Ok")).build();
 	}
 }

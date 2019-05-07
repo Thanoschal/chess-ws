@@ -20,15 +20,11 @@ public class GameStats {
     public Response handle() throws ClassNotFoundException, SQLException {
         ObjectNode node = new ObjectMapper().createObjectNode();
         Class.forName("com.mysql.jdbc.Driver");
-        Connection con = DriverManager.getConnection( "jdbc:mysql://localhost:3306/m111","root","root");
-        PreparedStatement stmt = con.prepareStatement(this.query);
-        ResultSet rs = stmt.executeQuery();
-        while (rs.next()) {
-            node.put(rs.getString("description"), rs.getFloat("number"));
+        try (Connection con = DriverManager.getConnection( "jdbc:mysql://localhost:3306/m111","root","root"); PreparedStatement stmt = con.prepareStatement(query)) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next())
+                node.put(rs.getString("description"), rs.getFloat("number"));
         }
-        rs.close();
-        stmt.close();
-        con.close();
-        return Response.status(200).entity(node.toString()).build();
+        return Response.status(200).entity(node).build();
     }
 }

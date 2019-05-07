@@ -34,12 +34,12 @@ public class Login {
 		Class.forName("com.mysql.jdbc.Driver");
 		Connection con = DriverManager.getConnection( "jdbc:mysql://localhost:3306/m111","root","root");
 		User user = new Gson().fromJson(input, User.class);
-		PreparedStatement stmt = con.prepareStatement(this.query);
+		PreparedStatement stmt = con.prepareStatement(query);
 		stmt.setString(1, user.getName());
 		stmt.setString(2, user.getPassword());
 		ResultSet rs = stmt.executeQuery();
 		if (rs.next()) {
-			PreparedStatement updstmt = con.prepareStatement(this.loggedIn);
+			PreparedStatement updstmt = con.prepareStatement(loggedIn);
 			updstmt.setString(1, user.getName());
 			int rows = updstmt.executeUpdate();
 			if (rows > 0) {

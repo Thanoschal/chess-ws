@@ -28,14 +28,11 @@ public class PersonalStats {
     public Response handle(@PathParam("username") String username) throws SQLException, ClassNotFoundException {
         ObjectNode node = new ObjectMapper().createObjectNode();
         Class.forName("com.mysql.jdbc.Driver");
-        Connection con = DriverManager.getConnection( "jdbc:mysql://localhost:3306/m111","root","root");
-        PreparedStatement stmt = con.prepareStatement(this.query);
-        for (int i = 1; i < 17; i++) stmt.setString(i, username);
-        ResultSet rs = stmt.executeQuery();
-        while (rs.next()) node.put(rs.getString("description"), rs.getFloat("number"));
-        rs.close();
-        stmt.close();
-        con.close();
-        return Response.status(200).entity(node.toString()).build();
+        try (Connection con = DriverManager.getConnection( "jdbc:mysql://localhost:3306/m111","root","root"); PreparedStatement stmt = con.prepareStatement(query)) {
+            for (int i = 1; i < 17; i++) stmt.setString(i, username);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) node.put(rs.getString("description"), rs.getFloat("number"));
+        }
+        return Response.status(200).entity(node).build();
     }
 }

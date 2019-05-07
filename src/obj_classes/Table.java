@@ -26,11 +26,6 @@ public class Table {
 	public boolean equals(Object obj) {		
 		if (obj == null || getClass() != obj.getClass()) return false;
 		Table other = (Table) obj;
-		if (this.black.contentEquals(other.getBlack()) && this.white.equals(other.getWhite())) {
-			return true;
-		}
-		else {
-			return false;
-		}
+		return (this.black.contentEquals(other.getBlack()) && this.white.equals(other.getWhite()));
 	}
 }

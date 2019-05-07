@@ -18,18 +18,15 @@ public class Top5 {
     public Response handle() throws ClassNotFoundException, SQLException {
         JsonArray jsonArray = new JsonArray();
         Class.forName("com.mysql.jdbc.Driver");
-        Connection con = DriverManager.getConnection( "jdbc:mysql://localhost:3306/m111","root","root");
-        PreparedStatement stmt = con.prepareStatement(this.query);
-        ResultSet rs = stmt.executeQuery();
-        while (rs.next()) {
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("winner", rs.getString("winner"));
-            jsonObject.addProperty("wins", rs.getInt("wins"));
-            jsonArray.add(jsonObject);
-        }
-        rs.close();
-        stmt.close();
-        con.close();
-        return Response.status(200).entity(jsonArray.toString()).build();
+        try (Connection con = DriverManager.getConnection( "jdbc:mysql://localhost:3306/m111","root","root"); PreparedStatement stmt = con.prepareStatement(query)) {
+           ResultSet rs = stmt.executeQuery();
+           while (rs.next()) {
+               JsonObject jsonObject = new JsonObject();
+               jsonObject.addProperty("winner", rs.getString("winner"));
+               jsonObject.addProperty("wins", rs.getInt("wins"));
+               jsonArray.add(jsonObject);
+           }
+       }
+        return Response.status(200).entity(jsonArray).build();
     }
 }

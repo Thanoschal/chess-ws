@@ -34,36 +34,33 @@ public class Register {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response handle(String input) throws SQLException, ClassNotFoundException {
 		int status;
-		ObjectNode objectNode = new ObjectMapper().createObjectNode();
-		Class.forName("com.mysql.jdbc.Driver");
-		Connection con = DriverManager.getConnection( "jdbc:mysql://localhost:3306/m111","root","root");
+		ObjectNode node = new ObjectMapper().createObjectNode();
 		User user = new Gson().fromJson(input, User.class);
-		PreparedStatement stmt = con.prepareStatement(this.query);
-		stmt.setString(1, user.getName());
-		ResultSet rs = stmt.executeQuery();
-		int count = 0;
-		if (rs.next()) count = rs.getInt("count");
-		rs.close();
-		stmt.close();
-		if (count == 0) {
-			stmt = con.prepareStatement(this.updateStatement);
+		Class.forName("com.mysql.jdbc.Driver");
+		try (Connection con = DriverManager.getConnection( "jdbc:mysql://localhost:3306/m111","root","root"); PreparedStatement stmt = con.prepareStatement(query)) {
 			stmt.setString(1, user.getName());
-			stmt.setString(2, user.getPassword());			
-			if (stmt.executeUpdate() > 0) {
-				status = 200;
-				objectNode.put("message", "Ok");
+			ResultSet rs = stmt.executeQuery();
+			int count = 0;
+			if (rs.next()) count = rs.getInt("count");
+			if (count == 0) {
+				try (PreparedStatement updstmt  = con.prepareStatement(updateStatement)) {
+					updstmt.setString(1, user.getName());
+					updstmt.setString(2, user.getPassword());
+					if (updstmt.executeUpdate() > 0) {
+						status = 200;
+						node.put("message", "Ok");
+					}
+					else {
+						status = 500;
+						node.put("message", "Failed");
+					}
+				}
 			}
 			else {
-				status = 500;
-				objectNode.put("message", "Failed");
+				status = 400;
+				node.put("message", "Already exists");
 			}
-			stmt.close();
 		}
-		else {
-			status = 400;
-			objectNode.put("message", "Already exists");
-		}
-		con.close();
-		return Response.status(status).entity(objectNode.toString()).build();
+		return Response.status(status).entity(node).build();
 	}
 }

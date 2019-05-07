@@ -28,26 +28,24 @@ public class EndOfGame {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response handle(String input) throws ClassNotFoundException, SQLException {
 		int status;
-		ObjectNode objectNode = new ObjectMapper().createObjectNode();
-		Class.forName("com.mysql.jdbc.Driver");
-		Connection con = DriverManager.getConnection( "jdbc:mysql://localhost:3306/m111","root","root");
+		ObjectNode node = new ObjectMapper().createObjectNode();
 		FinishedGame finishedGame = new Gson().fromJson(input, FinishedGame.class);
-		PreparedStatement stmt = con.prepareStatement(this.updateStatement);
-		stmt.setString(1, finishedGame.getWhite());
-		stmt.setString(2, finishedGame.getBlack());
-		stmt.setInt(3, finishedGame.getMoves());
-		stmt.setString(4, finishedGame.getWinner());
-		stmt.setString(5, finishedGame.getWinnerColor());
-		if (stmt.executeUpdate() > 0) {
-			status = 200;
-			objectNode.put("message", "Ok");
+		Class.forName("com.mysql.jdbc.Driver");
+		try (Connection con = DriverManager.getConnection( "jdbc:mysql://localhost:3306/m111","root","root"); PreparedStatement stmt = con.prepareStatement(updateStatement)) {
+			stmt.setString(1, finishedGame.getWhite());
+			stmt.setString(2, finishedGame.getBlack());
+			stmt.setInt(3, finishedGame.getMoves());
+			stmt.setString(4, finishedGame.getWinner());
+			stmt.setString(5, finishedGame.getWinnerColor());
+			if (stmt.executeUpdate() > 0) {
+				status = 200;
+				node.put("message", "Ok");
+			}
+			else {
+				status = 500;
+				node.put("message", "Failed");
+			}
 		}
-		else {
-			status = 500;
-			objectNode.put("message", "Failed");
-		}
-		stmt.close();
-		con.close();
-		return Response.status(status).entity(objectNode.toString()).build();
+		return Response.status(status).entity(node).build();
 	}
 }
