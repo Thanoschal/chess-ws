@@ -36,20 +36,20 @@ public class Login {
 		try (Connection con = DriverManager.getConnection( "jdbc:mysql://localhost:3306/m111","root","root"); PreparedStatement stmt = con.prepareStatement(query)) {
 			stmt.setString(1, user.getName());
 			stmt.setString(2, user.getPassword());
-			ResultSet rs = stmt.executeQuery();
-			if (rs.next()) {
-				PreparedStatement updstmt = con.prepareStatement(loggedIn);
-				updstmt.setString(1, user.getName());
-				int rows = updstmt.executeUpdate();
-				if (rows > 0) {
-					status = 200;
-					node.put("message", "Ok");
-				} else {
-					status = 401;
-					node.put("message", "Already logged in");
+			if (stmt.executeQuery().next()) {
+				try (PreparedStatement updstmt = con.prepareStatement(loggedIn)){
+					updstmt.setString(1, user.getName());
+					if (updstmt.executeUpdate() > 0) {
+						status = 200;
+						node.put("message", "Ok");
+					}
+					else {
+						status = 401;
+						node.put("message", "Already logged in");
+					}
 				}
-				updstmt.close();
-			} else {
+			}
+			else {
 				status = 400;
 				node.put("message", "Not authorized");
 			}
