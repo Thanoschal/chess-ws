@@ -20,7 +20,7 @@ public class PersonalStats {
             "SELECT COUNT(*) AS number, 'draws' AS description FROM tables WHERE  (white=? or black=?) and winner is null UNION ALL " +
             "SELECT COUNT(*) AS number, 'white' AS description FROM tables WHERE white=? UNION ALL " +
             "SELECT COUNT(*) AS number, 'black' AS description FROM tables WHERE black=? UNION ALL " +
-            "SELECT AVG(mv) as number, 'avgMoves' as description FROM (SELECT (moves-1) AS mv FROM tables WHERE (white=? or black=?) and winner<>? and winner is not null UNION ALL SELECT moves AS mv FROM tables WHERE (white=? or black=?) and (winner=? or winner is null)) AS a";
+            "SELECT AVG(mv) as number, 'avgMoves' as description FROM (SELECT moves AS mv FROM tables WHERE (white=? OR black=?) AND moves=0 UNION ALL SELECT moves AS mv FROM tables WHERE (winner=? AND moves<>0) OR (winner IS NULL ) OR (white=? AND winner<>? AND moves<>0 ) UNION ALL SELECT moves-1 AS mv FROM tables WHERE black=? AND winner<>? AND moves<>0 ) AS a";
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -29,7 +29,7 @@ public class PersonalStats {
         ObjectNode node = new ObjectMapper().createObjectNode();
         Class.forName("com.mysql.jdbc.Driver");
         try (Connection con = DriverManager.getConnection( "jdbc:mysql://localhost:3306/m111","root","root"); PreparedStatement stmt = con.prepareStatement(query)) {
-            for (int i = 1; i < 17; i++) stmt.setString(i, username);
+            for (int i = 1; i < 18; i++) stmt.setString(i, username);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) node.put(rs.getString("description"), rs.getFloat("number"));
         }
