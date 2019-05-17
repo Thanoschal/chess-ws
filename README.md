@@ -5,3 +5,4 @@ The server side of the [Chess game over Kafka](https://github.com/patschris/Ches
 war file to [Apache Tomcat](http://tomcat.apache.org/) and install the database 
 [m111](https://github.com/Thanoschal/chess-ws/blob/master/m111.sql) and the Kafka server at the same machine Tomcat runs. 
 Then, the services are available under the path http://x.x.x.x:8080/chess-ws/rest, where x.x.x.x is the IP of the hosting machine.
+<br/> <br/> ![image](https://github.com/Thanoschal/chess-ws/blob/master/ApacheTomcatManager.PNG)
